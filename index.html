@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <!-- V2: removed maximum-scale & user-scalable=no — restores a11y pinch-zoom -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0a0a0f" />
+  <meta name="description" content="VoteUp — Demokratische Partizipation für die Gen Z. Lerne, verstehe und stimme ab." />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta property="og:title" content="VoteUp — Deine Stimme. Echt einfach." />
+  <meta property="og:description" content="Die demokratische Super-App für Erstwähler und die Gen Z." />
+  <meta name="robots" content="index, follow" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
+
+  <title>VoteUp — Deine Stimme. Echt einfach.</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- =====================================================
+     ONBOARDING SCREEN
+     ===================================================== -->
+<div id="screen-onboarding" class="screen active" role="main" aria-label="Willkommen bei VoteUp">
+  <div class="onboarding-wrap">
+
+    <!-- Slide 1 -->
+    <div class="ob-slide active" id="ob-0" aria-hidden="false">
+      <div class="ob-glow ob-glow-green" aria-hidden="true"></div>
+      <div class="ob-logo" aria-label="VoteUp Logo">
+        <span class="logo-dot" aria-hidden="true"></span>
+        <span class="logo-vote">Vote</span><span class="logo-up">Up</span>
+      </div>
+      <div class="ob-hero-emoji" aria-hidden="true">🗳️</div>
+      <h1 class="ob-title">Demokratie<br/>für deine Generation.</h1>
+      <p class="ob-sub">Nachrichten in 60 Sekunden. Quizze. Echte Abstimmungen. Alles in einer App.</p>
+      <button class="btn-primary ob-next" onclick="nextObSlide()" aria-label="Weiter zu Slide 2">Los geht's</button>
+      <div class="ob-dots" role="tablist" aria-label="Onboarding Fortschritt">
+        <span class="ob-dot active" aria-label="Schritt 1 von 3"></span>
+        <span class="ob-dot" aria-label="Schritt 2 von 3"></span>
+        <span class="ob-dot" aria-label="Schritt 3 von 3"></span>
+      </div>
+    </div>
+
+    <!-- Slide 2 -->
+    <div class="ob-slide" id="ob-1" aria-hidden="true">
+      <div class="ob-glow ob-glow-blue" aria-hidden="true"></div>
+      <div class="ob-icon-big" aria-hidden="true">⚡</div>
+      <h2 class="ob-title">60-Sekunden-<br/>Briefings.</h2>
+      <p class="ob-sub">Kein Algorithmus-Chaos. Nur die wichtigsten politischen Fakten — klar, neutral und schnell.</p>
+      <div class="ob-feature-list" role="list">
+        <div class="ob-feature" role="listitem">✅ Täglich aktualisiert</div>
+        <div class="ob-feature" role="listitem">✅ Quellen-transparent</div>
+        <div class="ob-feature" role="listitem">✅ Wissen testen mit Quiz</div>
+      </div>
+      <button class="btn-primary ob-next" onclick="nextObSlide()" aria-label="Weiter zu Slide 3">Weiter</button>
+      <div class="ob-dots" role="tablist" aria-label="Onboarding Fortschritt">
+        <span class="ob-dot" aria-label="Schritt 1 von 3"></span>
+        <span class="ob-dot active" aria-label="Schritt 2 von 3, aktiv"></span>
+        <span class="ob-dot" aria-label="Schritt 3 von 3"></span>
+      </div>
+    </div>
+
+    <!-- Slide 3 -->
+    <div class="ob-slide" id="ob-2" aria-hidden="true">
+      <div class="ob-glow ob-glow-pink" aria-hidden="true"></div>
+      <div class="ob-icon-big" aria-hidden="true">🔐</div>
+      <h2 class="ob-title">Deine Stimme.<br/>Sicher &amp; Anonym.</h2>
+      <p class="ob-sub">Cryptographisch verifiziert. Jede Stimme zählt genau einmal — und du behältst deine Privatsphäre.</p>
+      <div class="ob-feature-list" role="list">
+        <div class="ob-feature" role="listitem">🛡️ Zero-Knowledge Verifikation</div>
+        <div class="ob-feature" role="listitem">🗳️ Mock-Wahlen zum Üben</div>
+        <div class="ob-feature" role="listitem">📊 Live-Ergebnisse</div>
+      </div>
+      <button class="btn-primary ob-next" id="ob-final-btn" onclick="finishOnboarding()" aria-label="App starten">App starten →</button>
+      <div class="ob-dots" role="tablist" aria-label="Onboarding Fortschritt">
+        <span class="ob-dot" aria-label="Schritt 1 von 3"></span>
+        <span class="ob-dot" aria-label="Schritt 2 von 3"></span>
+        <span class="ob-dot active" aria-label="Schritt 3 von 3, aktiv"></span>
+      </div>
+    </div>
+
+  </div>
+</div><!-- /screen-onboarding -->
+
+
+<!-- =====================================================
+     MAIN APP SHELL — V2: sidebar + content layout
+     ===================================================== -->
+<div id="screen-app" class="screen">
+
+  <!-- ── V2: Left Sidebar (desktop) / Bottom bar (mobile) ── -->
+  <nav class="sidebar" id="sidebar" aria-label="Hauptnavigation">
+
+    <!-- Sidebar brand (desktop only) -->
+    <div class="sidebar-brand" aria-label="VoteUp">
+      <span class="logo-dot" aria-hidden="true"></span>
+      <span class="logo-vote">Vote</span><span class="logo-up">Up</span>
+    </div>
+
+    <!-- Nav items -->
+    <div class="sidebar-nav">
+      <button class="nav-item active" id="nav-feed"       onclick="switchTab('feed')"       aria-label="Feed" aria-current="page">
+        <span class="nav-icon" aria-hidden="true">📰</span>
+        <span class="nav-label">Feed</span>
+      </button>
+      <button class="nav-item" id="nav-lernen"    onclick="switchTab('lernen')"     aria-label="Lernen">
+        <span class="nav-icon" aria-hidden="true">⚡</span>
+        <span class="nav-label">Lernen</span>
+      </button>
+      <button class="nav-item nav-item--vote" id="nav-abstimmen" onclick="switchTab('abstimmen')" aria-label="Abstimmen">
+        <span class="nav-icon" aria-hidden="true">🗳️</span>
+        <span class="nav-label">Abstimmen</span>
+      </button>
+      <button class="nav-item" id="nav-profil"    onclick="switchTab('profil')"     aria-label="Profil">
+        <span class="nav-icon" aria-hidden="true">👤</span>
+        <span class="nav-label">Profil</span>
+      </button>
+    </div>
+
+    <!-- Sidebar footer: avatar + streak (desktop) -->
+    <div class="sidebar-footer">
+      <div class="sidebar-avatar" onclick="switchTab('profil')" role="button" tabindex="0" aria-label="Zu meinem Profil">
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=VoteUp&backgroundColor=0a0a0f" alt="Alex M. — Profilbild" />
+      </div>
+      <div class="sidebar-user-info">
+        <span class="sidebar-username">Alex M.</span>
+        <span class="sidebar-streak">🔥 7-Tage-Streak</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── V2: Main Content Area ── -->
+  <main class="app-main" id="app-main">
+
+    <!-- ── TOP BAR (mobile/tablet only) ── -->
+    <header class="topbar" id="topbar" aria-label="App-Kopfzeile">
+      <div class="topbar-logo" aria-label="VoteUp">
+        <span class="logo-dot sm" aria-hidden="true"></span>
+        <span class="logo-vote">Vote</span><span class="logo-up">Up</span>
+      </div>
+      <div class="topbar-right">
+        <div class="streak-badge" aria-label="Dein Lern-Streak: 7 Tage" title="Dein Streak">🔥 7</div>
+        <button class="avatar-btn" onclick="switchTab('profil')" aria-label="Zu meinem Profil">
+          <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=VoteUp&backgroundColor=0a0a0f" alt="Profilbild" />
+        </button>
+      </div>
+    </header>
+
+    <!-- ===================================================
+         TAB: FEED
+         =================================================== -->
+    <div class="tab-content active" id="tab-feed" role="tabpanel" aria-label="Nachrichten-Feed">
+      <div class="scroll-area">
+
+        <div class="feed-greeting">
+          <p class="greeting-label" id="greeting-date">Freitag, 18. April 2026</p>
+          <h2 class="greeting-title">Guten Morgen, Alex! 👋</h2>
+          <p class="greeting-sub">3 neue Themen warten auf dich. Dein Streak: <strong class="streak-text">7 Tage 🔥</strong></p>
+        </div>
+
+        <!-- VoteUp Compact CTA -->
+        <div class="compact-banner" onclick="switchTab('lernen')" role="button" tabindex="0"
+             aria-label="VoteUp-Compact Briefing lesen" onkeydown="if(event.key==='Enter'){switchTab('lernen')}">
+          <div class="compact-banner-left">
+            <span class="compact-label">VoteUp-Compact</span>
+            <p class="compact-title">Dein 60-Sekunden-Briefing für heute ist bereit</p>
+            <span class="compact-cta">Jetzt lesen →</span>
+          </div>
+          <div class="compact-banner-right" aria-hidden="true">⚡</div>
+        </div>
+
+        <!-- Topic Filter -->
+        <div class="section-label" id="feed-topics-label">Aktuelle Themen</div>
+        <div class="topic-filter" id="topic-filter" role="group" aria-labelledby="feed-topics-label">
+          <button class="topic-chip active" data-topic="all"        onclick="filterFeed('all', this)">Alle</button>
+          <button class="topic-chip"        data-topic="klima"      onclick="filterFeed('klima', this)">🌿 Klima</button>
+          <button class="topic-chip"        data-topic="wirtschaft" onclick="filterFeed('wirtschaft', this)">📈 Wirtschaft</button>
+          <button class="topic-chip"        data-topic="bildung"    onclick="filterFeed('bildung', this)">📚 Bildung</button>
+          <button class="topic-chip"        data-topic="wohnen"     onclick="filterFeed('wohnen', this)">🏠 Wohnen</button>
+          <button class="topic-chip"        data-topic="gesundheit" onclick="filterFeed('gesundheit', this)">🏥 Gesundheit</button>
+          <button class="topic-chip"        data-topic="digital"    onclick="filterFeed('digital', this)">💻 Digital</button>
+        </div>
+
+        <!-- V2: news-grid (2 cols on desktop, 1 col on mobile) -->
+        <div class="news-grid" id="news-list" role="list" aria-label="Nachrichten">
+          <!-- Populated by JS -->
+        </div>
+
+      </div>
+    </div><!-- /tab-feed -->
+
+    <!-- ===================================================
+         TAB: LERNEN
+         =================================================== -->
+    <div class="tab-content" id="tab-lernen" role="tabpanel" aria-label="Lernbereich">
+      <div class="scroll-area">
+
+        <div class="briefing-header">
+          <h2 class="tab-title">VoteUp-Compact</h2>
+          <p class="tab-sub">Dein tägliches 60-Sekunden-Briefing</p>
+        </div>
+
+        <!-- V2: briefing cards — grid on tablet+, scroll on mobile -->
+        <div class="briefing-cards" id="briefing-cards" role="list" aria-label="Tages-Briefings">
+          <!-- Populated by JS -->
+        </div>
+
+        <div class="briefing-progress" aria-label="Lesefortschritt">
+          <div class="progress-bar-wrap" role="progressbar" aria-valuemin="0" aria-valuemax="100" id="briefing-progress-bar-wrap">
+            <div class="progress-bar-fill" id="briefing-progress-bar" style="width:0%"></div>
+          </div>
+          <span class="progress-label" id="briefing-progress-label" aria-live="polite">0 / 3 gelesen</span>
+        </div>
+
+        <!-- Quiz Section -->
+        <section class="quiz-section" id="quiz-section" aria-label="Wissensquiz">
+          <div class="section-label">Wissen testen</div>
+          <div class="quiz-card" id="quiz-card">
+            <!-- Populated by JS -->
+          </div>
+        </section>
+
+        <!-- Party Compass -->
+        <section aria-label="Partei-Positionen">
+          <div class="section-label" style="margin-top:2rem">Partei-Positionen</div>
+          <!-- V2: wrapping grid on desktop -->
+          <div class="party-cards" id="party-cards" role="list" aria-label="Partei-Positionen im Überblick">
+            <!-- Populated by JS -->
+          </div>
+        </section>
+
+      </div>
+    </div><!-- /tab-lernen -->
+
+    <!-- ===================================================
+         TAB: ABSTIMMEN
+         =================================================== -->
+    <div class="tab-content" id="tab-abstimmen" role="tabpanel" aria-label="Abstimmungen">
+      <div class="scroll-area">
+
+        <div class="briefing-header">
+          <!-- V2: ballot grid decoration -->
+          <div class="ballot-grid-bg" aria-hidden="true"></div>
+          <h2 class="tab-title">Aktuelle Abstimmungen</h2>
+          <p class="tab-sub">Übe deine demokratische Stimme — anonym &amp; sicher</p>
+        </div>
+
+        <!-- Verify Banner -->
+        <div class="verify-banner" id="verify-banner" onclick="openVerifyModal()"
+             role="button" tabindex="0" aria-label="Identität verifizieren"
+             onkeydown="if(event.key==='Enter'){openVerifyModal()}">
+          <div class="verify-banner-icon" aria-hidden="true">🔐</div>
+          <div class="verify-banner-text">
+            <strong>Identität verifizieren</strong>
+            <span>Für echte Abstimmungen — einmalig &amp; sicher</span>
+          </div>
+          <div class="verify-chevron" aria-hidden="true">›</div>
+        </div>
+
+        <!-- V2: ballots in a responsive grid -->
+        <div class="ballot-grid" id="ballot-list" role="list" aria-label="Abstimmungskarten">
+          <!-- Populated by JS -->
+        </div>
+
+      </div>
+    </div><!-- /tab-abstimmen -->
+
+    <!-- ===================================================
+         TAB: PROFIL
+         =================================================== -->
+    <div class="tab-content" id="tab-profil" role="tabpanel" aria-label="Mein Profil">
+      <div class="scroll-area">
+
+        <!-- V2: profile hero with wider layout on desktop -->
+        <div class="profile-hero">
+          <div class="profile-avatar-wrap">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=VoteUp&backgroundColor=0a0a0f"
+                 class="profile-avatar" alt="Dein Avatar — Alex M." />
+            <div class="profile-avatar-ring" aria-hidden="true"></div>
+          </div>
+          <h2 class="profile-name">Alex M.</h2>
+          <p class="profile-since">Mitglied seit April 2026</p>
+          <div class="profile-badges" role="list" aria-label="Abzeichen">
+            <span class="profile-badge" role="listitem">🔥 7 Tage Streak</span>
+            <span class="profile-badge" role="listitem">⚡ Schnell-Leser</span>
+            <span class="profile-badge" role="listitem">🗳️ Erstwähler</span>
+          </div>
+        </div>
+
+        <!-- V2: Stats in a 4-col grid on desktop, 2-col on mobile -->
+        <div class="stats-grid" role="list" aria-label="Deine Statistiken">
+          <div class="stat-card" role="listitem">
+            <div class="stat-value">12</div>
+            <div class="stat-label">Briefings gelesen</div>
+          </div>
+          <div class="stat-card" role="listitem">
+            <div class="stat-value" id="stat-votes" aria-live="polite">0</div>
+            <div class="stat-label">Abstimmungen</div>
+          </div>
+          <div class="stat-card" role="listitem">
+            <div class="stat-value">85%</div>
+            <div class="stat-label">Quiz-Genauigkeit</div>
+          </div>
+          <div class="stat-card" role="listitem">
+            <div class="stat-value">7🔥</div>
+            <div class="stat-label">Aktueller Streak</div>
+          </div>
+        </div>
+
+        <!-- Topics of Interest -->
+        <div class="section-label">Meine Themen</div>
+        <div class="topic-filter" style="flex-wrap:wrap;margin-bottom:1.5rem" role="group" aria-label="Meine Themen">
+          <span class="topic-chip active small">🌿 Klima</span>
+          <span class="topic-chip active small">📚 Bildung</span>
+          <span class="topic-chip active small">🏠 Wohnen</span>
+          <span class="topic-chip small">📈 Wirtschaft</span>
+          <span class="topic-chip small">🏥 Gesundheit</span>
+        </div>
+
+        <!-- Settings -->
+        <div class="section-label">Einstellungen</div>
+        <ul class="settings-list" role="list">
+          <li class="settings-item">
+            <span>🔔 Benachrichtigungen</span>
+            <label class="toggle" aria-label="Benachrichtigungen umschalten">
+              <input type="checkbox" checked />
+              <span class="toggle-slider"></span>
+            </label>
+          </li>
+          <li class="settings-item">
+            <span>🌙 Dunkles Design</span>
+            <label class="toggle" aria-label="Dunkles Design umschalten">
+              <input type="checkbox" checked />
+              <span class="toggle-slider"></span>
+            </label>
+          </li>
+          <li class="settings-item">
+            <span>🌐 Sprache</span>
+            <span class="settings-value">Deutsch</span>
+          </li>
+          <li class="settings-item">
+            <span>🔐 Verifikation</span>
+            <span class="settings-value verify-status" id="verify-status-profile" aria-live="polite">Ausstehend</span>
+          </li>
+        </ul>
+
+        <div class="profile-footer">
+          <button class="btn-ghost full" onclick="resetAndGoOnboarding()">Demo zurücksetzen</button>
+          <p class="profile-legal">VoteUp V2 — Pitch-Demo · Alle Daten simuliert</p>
+        </div>
+
+      </div>
+    </div><!-- /tab-profil -->
+
+  </main><!-- /app-main -->
+
+</div><!-- /screen-app -->
+
+
+<!-- =====================================================
+     MODALS — V2: centered dialog on desktop, sheet on mobile
+     ===================================================== -->
+
+<!-- Article Modal -->
+<div class="modal-overlay" id="article-modal" role="dialog" aria-modal="true" aria-labelledby="am-title">
+  <div class="modal-sheet" id="article-modal-content">
+    <button class="modal-close-btn" onclick="closeModal('article-modal')" aria-label="Artikel schließen">✕</button>
+    <div class="modal-handle" aria-hidden="true"></div>
+    <div class="article-modal-topic" id="am-topic" aria-label="Thema"></div>
+    <h2 class="article-modal-title" id="am-title"></h2>
+    <div class="article-modal-meta" id="am-meta"></div>
+    <p class="article-modal-body" id="am-body"></p>
+    <div class="article-modal-actions">
+      <button class="btn-ghost" onclick="closeModal('article-modal')">Schließen</button>
+      <button class="btn-primary" onclick="switchTab('abstimmen'); closeModal('article-modal')">Zur Abstimmung →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Vote Confirm Modal -->
+<div class="modal-overlay" id="vote-modal" role="dialog" aria-modal="true" aria-labelledby="vm-title">
+  <div class="modal-sheet" id="vote-modal-content">
+    <button class="modal-close-btn" onclick="closeModal('vote-modal')" aria-label="Abbrechen">✕</button>
+    <div class="modal-handle" aria-hidden="true"></div>
+    <div class="vote-modal-icon" id="vm-icon" aria-hidden="true"></div>
+    <h2 class="vote-modal-title" id="vm-title"></h2>
+    <p class="vote-modal-question" id="vm-question"></p>
+    <div class="vote-modal-choice" id="vm-choice" aria-live="polite"></div>
+    <div class="vote-modal-btns">
+      <button class="btn-ghost" onclick="closeModal('vote-modal')">Abbrechen</button>
+      <button class="btn-primary" id="vm-confirm-btn" onclick="confirmVote()">✓ Jetzt abstimmen</button>
+    </div>
+  </div>
+</div>
+
+<!-- Vote Success Modal -->
+<div class="modal-overlay" id="success-modal" role="dialog" aria-modal="true" aria-labelledby="success-heading">
+  <div class="modal-sheet success-sheet">
+    <button class="modal-close-btn" onclick="closeModal('success-modal')" aria-label="Schließen">✕</button>
+    <div class="modal-handle" aria-hidden="true"></div>
+    <div class="success-icon" aria-hidden="true">✅</div>
+    <h2 class="success-title" id="success-heading">Stimme abgegeben!</h2>
+    <p class="success-sub" id="success-sub-text" aria-live="polite"></p>
+    <div class="success-hash">
+      <span class="hash-label">Anonymer Vote-Hash (SHA-256-Simulation)</span>
+      <code class="hash-value" id="success-hash" aria-label="Kryptographischer Hash deiner Stimme"></code>
+    </div>
+    <button class="btn-primary full" onclick="closeModal('success-modal')">Super, danke!</button>
+  </div>
+</div>
+
+<!-- Verify ID Modal -->
+<div class="modal-overlay" id="verify-modal" role="dialog" aria-modal="true" aria-labelledby="verify-modal-heading">
+  <div class="modal-sheet" id="verify-modal-content">
+    <button class="modal-close-btn" onclick="closeModal('verify-modal')" aria-label="Schließen">✕</button>
+    <div class="modal-handle" aria-hidden="true"></div>
+    <h2 class="verify-modal-title" id="verify-modal-heading">🔐 Identität verifizieren</h2>
+    <p class="verify-modal-sub">Einmalige Verifikation für sichere Abstimmungen. Deine persönlichen Daten werden <strong>nicht</strong> gespeichert.</p>
+
+    <div class="verify-steps" id="verify-steps" aria-label="Verifikations-Schritte">
+      <div class="verify-step" id="vstep-0">
+        <div class="vstep-num" aria-label="Schritt 1">1</div>
+        <div class="vstep-body">
+          <strong>E-Mail bestätigen</strong>
+          <label for="verify-email" class="sr-only">E-Mail-Adresse</label>
+          <input type="email" class="verify-input" id="verify-email"
+                 placeholder="deine@email.de" autocomplete="email" aria-required="true" />
+        </div>
+      </div>
+      <div class="verify-step" id="vstep-1">
+        <div class="vstep-num" aria-label="Schritt 2">2</div>
+        <div class="vstep-body">
+          <strong>Personalausweis scannen</strong>
+          <p class="vstep-note">Simulation: Klicke auf "Scannen" um fortzufahren</p>
+          <button class="btn-ghost full" onclick="simulateScan()">📷 Jetzt scannen</button>
+        </div>
+      </div>
+      <div class="verify-step" id="vstep-2">
+        <div class="vstep-num" aria-label="Schritt 3">3</div>
+        <div class="vstep-body">
+          <strong>Kryptographischer Schlüssel</strong>
+          <p class="vstep-note">Wird lokal generiert — nie übertragen</p>
+          <code class="verify-key-preview" id="verify-key-preview" aria-live="polite">Wird generiert...</code>
+        </div>
+      </div>
+    </div>
+
+    <div class="verify-btns">
+      <button class="btn-ghost" onclick="closeModal('verify-modal')">Abbrechen</button>
+      <button class="btn-primary" id="verify-btn" onclick="processVerification()">Verifizieren</button>
+    </div>
+  </div>
+</div>
+
+<!-- Quiz Result Modal -->
+<div class="modal-overlay" id="quiz-result-modal" role="dialog" aria-modal="true" aria-labelledby="qr-title">
+  <div class="modal-sheet">
+    <button class="modal-close-btn" onclick="nextQuizQuestion(); closeModal('quiz-result-modal')" aria-label="Schließen">✕</button>
+    <div class="modal-handle" aria-hidden="true"></div>
+    <div class="quiz-result-icon" id="qr-icon" aria-hidden="true"></div>
+    <h2 class="quiz-result-title" id="qr-title" aria-live="polite"></h2>
+    <p class="quiz-result-body" id="qr-body"></p>
+    <button class="btn-primary full" onclick="nextQuizQuestion(); closeModal('quiz-result-modal')">Weiter →</button>
+  </div>
+</div>
+
+<!-- V2: Global toast notification -->
+<div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
